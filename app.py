@@ -1,13 +1,13 @@
-# app.py
-from dotenv import load_dotenv
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from youtube_transcript_api import TranscriptsDisabled
-from youtube_RAG import run_rag_pipeline  # This is the new function you'll extract from your current code
-app = Flask(__name__)
-CORS(app)  # Allow access from Chrome Extension
+from youtube_RAG import run_rag_pipeline 
 
-@app.route('/ask', methods=['POST'])
+app = Flask(__name__)
+CORS(app)  
+
 @app.route('/ask', methods=['POST'])
 def ask():
     data = request.get_json()
@@ -24,7 +24,7 @@ def ask():
         return jsonify({'error': 'No transcript available for this video'}), 400
     except Exception as e:
         import traceback
-        traceback.print_exc()  # 🐞 Show full stack trace in terminal
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 

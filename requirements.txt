@@ -2,4 +2,12 @@ flask
 flask-cors
 langchain
 langchain-openai
+langchain
+langchain-community
+langchain-core
+faiss-cpu
+python-dotenv
 youtube-transcript-api
+google-generativeai
+openai-whisper
+yt-dlp
