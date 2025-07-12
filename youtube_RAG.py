@@ -1,11 +1,9 @@
 import os
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-import pickle
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 
-from langchain_community.vectorstores import FAISS
-from langchain_community.vectorstores import Qdrant
+# from langchain_community.vectorstores import FAISS
+from langchain_qdrant import QdrantVectorStore
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
 
@@ -13,52 +11,56 @@ from langchain_core.prompts import PromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from dotenv import load_dotenv
 from transcript_handler import get_english_transcript
-import google.generativeai as genai
+from google import genai
 from pathlib import Path
 load_dotenv()
 
-# GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-# genai.configure(api_key=GEMINI_API_KEY)
+# Set up gemini client
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+genai_client = genai.Client(api_key=GEMINI_API_KEY)
 
 def run_rag_pipeline(video_id: str, question: str) -> str:
-    # === Setup Qdrant Client ===
-    qdrant_client = QdrantClient(
-    url=os.getenv("QDRANT_URL"), 
-    api_key=os.getenv("QDRANT_API_KEY")
-    )
-
+    
     collection_name = f"yt_{video_id}"
     embedding = OpenAIEmbeddings(model="text-embedding-3-small")
 
-    # === Create Collection if Needed ===
-    if collection_name not in [col.name for col in qdrant_client.get_collections().collections]:
+    # === Try loading the existing collection
+    try:
+        vector_store = QdrantVectorStore(
+            url=os.getenv("QDRANT_URL"),
+            api_key=os.getenv("QDRANT_API_KEY"),
+            collection_name=collection_name,
+            embedding=embedding,
+            prefer_grpc=True
+        )
+        # Trigger a test query to check if it exists
+        _ = vector_store.similarity_search("test", k=1)
+        collection_exists = True
+    except Exception as e:
+        print("🟡 Collection not found, creating new one...")
+        collection_exists = False
+    
+    if not collection_exists:
         # Get Transcript
         transcript = get_english_transcript(video_id)
         if not transcript:
             return "❌ Transcript not available or could not be processed."
 
+        print(f"📄 Transcript length: {len(transcript)}")
+        print(f"📄 Transcript preview: {transcript[:300]}")
+
         # Split into Chunks
         splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         chunks = splitter.create_documents([transcript])
 
-        # Create collection and upload vectors
-        qdrant_client.recreate_collection(
-            collection_name=collection_name,
-            vectors_config=VectorParams(size=1536, distance=Distance.COSINE)
-        )
-
-        vector_store = Qdrant.from_documents(
+        # Create and upload to vector store
+        vector_store = QdrantVectorStore.from_documents(
             documents=chunks,
             embedding=embedding,
-            location=qdrant_client,
-            collection_name=collection_name
-        )
-    else:
-        # Load existing vector store
-        vector_store = Qdrant(
-            client=qdrant_client,
+            url=os.getenv("QDRANT_URL"),
+            api_key=os.getenv("QDRANT_API_KEY"),
             collection_name=collection_name,
-            embeddings=embedding
+            prefer_grpc=True
         )
 
     # 4. Retrieve Relevant Context
@@ -92,8 +94,16 @@ def run_rag_pipeline(video_id: str, question: str) -> str:
         """
     )
 
-    llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.2)
-    final_prompt = prompt.invoke({"context": context_text, "question": question})
-    response = llm.invoke(final_prompt)
+    # llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0.2)
+    # final_prompt = prompt.invoke({"context": context_text, "question": question})
+    # response = llm.invoke(final_prompt)
+    # print("Final Output:\n", response)
+    # return response.content
 
-    return response.content
+    final_prompt = prompt.format(context=context_text, question=question)
+    response = genai_client.models.generate_content(
+        model='gemini-1.5-flash', 
+        contents=final_prompt
+    )
+    print("Final Response:\n",response.text)
+    return response.text
