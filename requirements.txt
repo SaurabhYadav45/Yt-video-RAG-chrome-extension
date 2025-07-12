@@ -8,6 +8,8 @@ langchain-core
 faiss-cpu
 python-dotenv
 youtube-transcript-api
-google-generativeai
 openai-whisper
 yt-dlp
+langchain-qdrant
+qdrant-client
+google-genai
