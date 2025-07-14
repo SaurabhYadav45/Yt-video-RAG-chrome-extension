@@ -59,30 +59,49 @@ A smart Chrome Extension that enables users to **chat with YouTube videos** and 
    git clone https://github.com/SaurabhYadav45/Yt-video-RAG-chrome-extension
    cd Yt-video-RAG-chrome-extension
    
-2. Install dependencies:
-  pip install -r requirements.txt
 
-3. Add your API keys in .env file:
-  GEMINI_API_KEY=your_key_here
-  OPENAI_API_KEY=optional_if_using
+## 🔧 Setup Instructions
 
-4. Run the Flask backend:
-  python app.py
+2. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+Add your API keys in a .env file:
 
-5. Load the Chrome extension:
-  Go to chrome://extensions/
-  Enable Developer Mode
-  Click Load Unpacked and select the extension/ folder
+ini
+Copy
+Edit
+GEMINI_API_KEY=your_key_here
+OPENAI_API_KEY=optional_if_using
+Run the Flask backend:
 
-Status:
+bash
+Copy
+Edit
+python app.py
+Load the Chrome extension:
+
+Open chrome://extensions/ in Chrome
+
+Enable Developer Mode
+
+Click Load Unpacked
+
+Select the extension/ folder from the repo
+
+✅ Status
 Fully working MVP
-Open to future enhancements like:
-  Support for multilingual conversations
-  Improved Whisper integration
-  UI animations with React or Tailwind
 
-Author:
+Open to future enhancements:
+
+🌍 Support for multilingual conversations
+
+🧠 Improved Whisper integration
+
+🎨 UI animations using React or Tailwind CSS
+
+👨‍💻 Author
 Saurabh Singh Yadav
+GitHub | LinkedIn
 
-License:
+📄 License
 This project is open-source and available under the MIT License.
