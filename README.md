@@ -65,43 +65,65 @@ A smart Chrome Extension that enables users to **chat with YouTube videos** and 
 2. **Install dependencies**:
    ```bash
    pip install -r requirements.txt
-Add your API keys in a .env file:
+   ```
 
-ini
-Copy
-Edit
-GEMINI_API_KEY=your_key_here
-OPENAI_API_KEY=optional_if_using
-Run the Flask backend:
+3. **Add your API keys** in a `.env` file:
+   ```
+   GEMINI_API_KEY=your_key_here
+   OPENAI_API_KEY=optional_if_using
+   ```
 
-bash
-Copy
-Edit
-python app.py
-Load the Chrome extension:
+4. **Run the Flask backend**:
+   ```bash
+   python app.py
+   ```
 
-Open chrome://extensions/ in Chrome
+5. **Load the Chrome extension**:
+   - Open `chrome://extensions/` in Chrome
+   - Enable **Developer Mode**
+   - Click **Load Unpacked**
+   - Select the `extension/` folder from the repo
 
-Enable Developer Mode
+---
 
-Click Load Unpacked
+## ✅ Status
 
-Select the extension/ folder from the repo
+- Fully working MVP
+- Open to future enhancements:
+  - 🌍 Support for multilingual conversations
+  - 🧠 Improved Whisper integration
+  - 🎨 UI animations using React or Tailwind CSS
 
-✅ Status
-Fully working MVP
+---
 
-Open to future enhancements:
+## 👨‍💻 Author
 
-🌍 Support for multilingual conversations
+**Saurabh Singh Yadav**  
+[GitHub](https://github.com/SaurabhYadav45) | [LinkedIn](https://www.linkedin.com/in/saurabhyadav45)
 
-🧠 Improved Whisper integration
+---
 
-🎨 UI animations using React or Tailwind CSS
+## 📄 License
 
-👨‍💻 Author
-Saurabh Singh Yadav
-GitHub | LinkedIn
+MIT License
 
-📄 License
-This project is open-source and available under the MIT License.
+Copyright (c) 2025 Saurabh Singh Yadav
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights  
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell  
+copies of the Software, and to permit persons to whom the Software is  
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in  
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR  
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,  
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE  
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER  
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,  
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
